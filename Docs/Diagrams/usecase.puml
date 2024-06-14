@@ -1,0 +1,50 @@
+@startuml UseCaseMCDisBot
+    skinparam actorStyle awesome
+    rectangle "Bot questioner" {
+        actor Client
+        actor Executor
+        actor Bot
+        actor Admin
+        actor Operator
+        queue RabbitMQ
+        actor Devops
+        database DataBase
+
+        Client -up- (Give the task)
+        Client -right- (Check task status)
+        Client -down- (View the result)
+
+        Devops -right- (Deployment)
+        Devops -down- (Configure)
+
+        Admin -left- (Connect bot to service)
+        Admin -up- (Add executor)
+
+        Operator -right- (View logs)
+
+        RabbitMQ -left- (Enqueue)
+        RabbitMQ -right- (Dequeue)
+
+        Bot -up- (Take a task)
+        Bot -left- (Send task status)
+        Bot -- (Send result)
+        Bot --- (Send the message)
+        Bot -- (DataBase entry)
+        Bot -- (Failure handling)
+        Bot -right- (Logging)
+        Bot -right- (Connect to service)
+
+        DataBase -up- (DataBase entry)
+
+        Executor -right- (Respond)
+
+        (Give the task) -right-|> (Enqueue): generalizes
+        (Check task status) -right-|> (Send task status): generalizes
+        (View the result) -right-|> (Send result): generalizes
+        (Dequeue) -down-|> (Take a task): generalizes
+        (Send the message) -left-|> (Respond): generalizes
+        (Connect bot to service) -left-|> (Connect to service): generalizes
+
+        (Failure handling) --|> (Logging): extends
+    }
+@enduml
