@@ -1,0 +1,27 @@
+@startuml
+state "Ожидание задания" as waiting
+state "Обработка задания" as processing
+state "Поиск исполнителя" as searching
+state "Ожидание отклика" as awaiting
+state "Исполнитель найден" as found
+state "Исполнитель не найден" as notfound
+state "Сообщение заказчику" as customer
+state "Задание завершено" as completed
+state "Ошибка" as error
+state "Проверка Валидности" as check
+
+
+[*] --> waiting
+ waiting --> check : Принятие задания 
+check --> error : проверка не пройдена
+error -->waiting
+check --> processing : проверка пройдена
+processing --> searching : поиск по определенным фильтрам
+searching --> awaiting : Отправка уведомления в канал Discord
+awaiting --> found : Получение сообщения от исполнителя
+awaiting --> notfound : Истечение времени поиска
+found --> completed : Получение уведомления о завершении задания
+notfound --> customer : сообщение об ошибке 
+completed --> waiting : переход в начальное состояние
+customer --> waiting :  переход в начальное состояние
+@enduml
