@@ -1,10 +1,6 @@
 @startuml ActivityDiagramMCDisBot
 |Client|
 start
-if (wanna check status?) is (yes) then
-:**Check task status**;
-stop
-else (no)
 :**Give the task**;
 
 |RabbitMQ|
