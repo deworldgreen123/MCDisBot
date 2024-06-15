@@ -1,0 +1,10 @@
+@startuml ActivityDiagramMCDisBot
+|Admin|
+start
+:**Connect bot to service**;
+
+|Bot|
+:**Connect to service**;
+
+stop
+@enduml

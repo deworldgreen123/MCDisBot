@@ -1,0 +1,30 @@
+@startuml ActivityDiagramMCDisBot
+|Client|
+start
+:**Give the task**;
+
+|RabbitMQ|
+:**Enqueue**;
+:**Dequeue**;
+
+|Bot|
+:**Take a task**;
+:**Log**;
+:**Database entry**;
+:**Send the message**;
+
+|Executor|
+:**Respond**;
+
+|Bot|
+repeat
+    :**Wait for response**;
+repeat while (time is up?) is (no)
+:**Log**;
+:**Database entry**;
+:**Send result**;
+
+|Client|
+:**View the result**;
+stop
+@enduml
