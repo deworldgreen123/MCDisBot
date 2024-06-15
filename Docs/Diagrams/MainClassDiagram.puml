@@ -1,0 +1,92 @@
+﻿@startuml
+package "Presentation" {
+  package "Primary Adapter" {
+    Class CommandsBot
+  }
+}
+
+package "Core" {
+  package "Primary Port" {
+    interface ITaskService {
+      +void Create(Task newTask)
+      +void Delete(ulong taskId)
+      +TaskStatus GetStatus(ulong taskId)
+      +Task GetById(ulong taskId)
+      +void AddDevToTask(ulong devId)
+    }
+
+    interface ISettingService {
+      +void Add(Setting newSetting)
+      +void Update(Setting newSetting)
+      +Setting GetById(ulong serverId)
+      +void Delete(ulong serverId)
+    }
+  }
+
+  Class TaskService {
+    -bool ValidationCheck(Task task)
+    -void SendTask(Task task)
+  }
+
+  Class SettingService {
+  }
+
+  Class EventPublisher {
+    +void SendMessage()
+  }
+
+  package "Secondary Port" {
+    interface ITaskRepository {
+      +IReadOnlyCollection<Task> GetAll()
+      +Task GetById(Guid id)
+      +void Add(Task model)
+      +void Update(Task model)
+      +bool Remove(Guid id)
+      +void Save()
+    }
+
+    interface ISettingRepository {
+      +IReadOnlyCollection<Setting> GetAll()
+      +User GetById(ulong id)
+      +void Add(Setting model)
+      +void Update(Setting model)
+      +bool Remove(ulong id)
+      +void Save()
+    }
+  }
+}
+
+package "Infrastructure" {
+  package "Secondary Adapter" {
+    Class TaskRepository
+
+    Class SettingRepository
+  }
+  
+  Class TaskBotContext {
+    +TaskBotContext(DbContextOptions<TaskBotContext> options)
+    +DbSet<Task> Tasks
+    +DbSet<Setting> Settings
+  }
+}
+
+package "Logger" {
+  Class EventLogger {
+    +void ExecuteAsync()
+  }
+}
+
+CommandsBot .. ITaskService
+CommandsBot .. ISettingService
+ITaskService <|.. TaskService
+ISettingService <|.. SettingService
+TaskService .. ITaskRepository
+TaskService .. ISettingService
+SettingService .. ISettingRepository
+ITaskRepository <|.d. TaskRepository
+ISettingRepository <|.d. SettingRepository
+TaskBotContext .u. TaskRepository
+TaskBotContext .u. SettingRepository
+EventPublisher -- EventLogger
+EventPublisher -- TaskService
+@enduml
