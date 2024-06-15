@@ -1,0 +1,13 @@
+@startuml ActivityDiagramMCDisBot
+|Client|
+start
+:**Check status**;
+
+|Bot|
+if (Task at hand) is (yes) then
+:**Send task status**;
+stop
+else (no)
+:**Send null task**;
+stop
+@enduml
