@@ -8,6 +8,6 @@ public interface ISettingRepository
   Task<Setting> GetById(ulong id);
   Task Add(Setting model);
   Task Update(Setting model);
-  Task<bool> Remove(ulong id);
+  Task Remove(ulong id);
   Task Save();
 }

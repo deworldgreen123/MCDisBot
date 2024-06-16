@@ -25,7 +25,7 @@ public class SettingRepository : ISettingRepository
     throw new NotImplementedException();
   }
 
-  public Task<bool> Remove(ulong id)
+  public Task Remove(ulong id)
   {
     throw new NotImplementedException();
   }

@@ -8,6 +8,6 @@ public interface ITaskRepository
   Task<TaskModel> GetById(ulong id);
   Task Add(TaskModel model);
   Task Update(TaskModel model);
-  Task<bool> Remove(ulong id);
+  Task Remove(ulong id);
   Task Save();
 }
