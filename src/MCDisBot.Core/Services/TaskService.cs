@@ -4,7 +4,7 @@ using MCDisBot.Core.Services.Interfaces;
 
 namespace MCDisBot.Core.Services;
 
-public class TaskService(ITaskRepository repository, ISettingService settingService) : ITaskService
+public class TaskService(ITaskRepository taskRepository, ISettingRepository settingRepository) : ITaskService
 {
   public Task Create(TaskModel newTask)
   {
@@ -21,12 +21,12 @@ public class TaskService(ITaskRepository repository, ISettingService settingServ
     throw new NotImplementedException();
   }
 
-  public Task GetById(ulong taskId)
+  public Task<TaskModel> GetById(ulong taskId)
   {
     throw new NotImplementedException();
   }
 
-  public Task AddDevToTask(ulong devId)
+  public Task AddDevToTask(TaskModel task, ulong devId)
   {
     throw new NotImplementedException();
   }

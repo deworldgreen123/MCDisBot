@@ -8,6 +8,6 @@ public interface ITaskService
   Task Create(TaskModel newTask);
   Task Delete(ulong taskId);
   Task<TaskStatus> GetStatus(ulong taskId);
-  Task GetById(ulong taskId);
-  Task AddDevToTask(ulong devId);
+  Task<TaskModel> GetById(ulong taskId);
+  Task AddDevToTask(TaskModel task, ulong devId);
 }
