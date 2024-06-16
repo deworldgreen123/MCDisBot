@@ -6,22 +6,22 @@ namespace MCDisBot.Core.Services;
 
 public class SettingService(ISettingRepository repository) : ISettingService
 {
-  public void Add(Setting newSetting)
+  public Task Add(Setting newSetting)
   {
     throw new NotImplementedException();
   }
 
-  public void Update(Setting newSetting)
+  public Task Update(Setting newSetting)
   {
     throw new NotImplementedException();
   }
 
-  public Setting GetById(ulong serverId)
+  public Task<Setting> GetById(ulong serverId)
   {
     throw new NotImplementedException();
   }
 
-  public void Delete(ulong serverId)
+  public Task Delete(ulong serverId)
   {
     throw new NotImplementedException();
   }

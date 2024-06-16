@@ -4,8 +4,8 @@ namespace MCDisBot.Core.Services.Interfaces;
 
 public interface ISettingService
 {
-  void Add(Setting newSetting);
-  void Update(Setting newSetting);
-  Setting GetById(ulong serverId);
-  void Delete(ulong serverId);
+  Task Add(Setting newSetting);
+  Task Update(Setting newSetting);
+  Task<Setting> GetById(ulong serverId);
+  Task Delete(ulong serverId);
 }

@@ -21,7 +21,7 @@ public class TaskService(ITaskRepository repository, ISettingService settingServ
     throw new NotImplementedException();
   }
 
-  public Task GetById(ulong taskId)
+  public Task<TaskModel> GetById(ulong taskId)
   {
     throw new NotImplementedException();
   }
