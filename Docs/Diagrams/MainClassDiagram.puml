@@ -1,7 +1,10 @@
 ﻿@startuml
 package "Presentation" {
   package "Primary Adapter" {
-    Class CommandsBot
+    Class CommandsBot {
+      -ITaskService p_taskService
+      -ISettingService p_settingService
+    }
   }
 }
 
@@ -24,14 +27,18 @@ package "Core" {
   }
 
   Class TaskService {
+    -ISettingRepository p_settingRepository
+    -ITaskRepository p_taskRepository
+
     -bool ValidationCheck(Task task)
     -void SendTask(Task task)
   }
 
   Class SettingService {
+    -ISettingRepository p_settingRepository
   }
 
-  Class EventPublisher {
+  Class TaskEventPublisher {
     +void SendMessage()
   }
 
@@ -58,9 +65,13 @@ package "Core" {
 
 package "Infrastructure" {
   package "Secondary Adapter" {
-    Class TaskRepository
+    Class TaskRepository{
+      -TaskBotContext p_context
+    }
 
-    Class SettingRepository
+    Class SettingRepository{
+      -TaskBotContext p_context
+    }
   }
   
   Class TaskBotContext {
@@ -76,17 +87,19 @@ package "Logger" {
   }
 }
 
-CommandsBot .. ITaskService
-CommandsBot .. ISettingService
+CommandsBot --> ITaskService
+CommandsBot --> ISettingService
+
 ITaskService <|.. TaskService
 ISettingService <|.. SettingService
-TaskService .. ITaskRepository
-TaskService .. ISettingService
-SettingService .. ISettingRepository
+TaskService --> ITaskRepository
+TaskService --> ISettingRepository
+SettingService --> ISettingRepository
+TaskEventPublisher "*" -l- "1" EventLogger : "Send"
+TaskEventPublisher -r-> TaskService
+
 ITaskRepository <|.d. TaskRepository
 ISettingRepository <|.d. SettingRepository
-TaskBotContext .u. TaskRepository
-TaskBotContext .u. SettingRepository
-EventPublisher -- EventLogger
-EventPublisher -- TaskService
+TaskBotContext -u-> TaskRepository
+TaskBotContext -u-> SettingRepository
 @enduml
