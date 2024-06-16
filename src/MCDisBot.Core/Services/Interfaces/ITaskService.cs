@@ -10,5 +10,5 @@ public interface ITaskService
   Task<bool> Delete(ulong taskId);
   Task<TaskStatus> GetStatus(ulong taskId);
   Task<TaskModel> GetById(ulong taskId);
-  Task<bool> AddDevToTask(ulong devId);
+  Task<bool> AddDevToTask(TaskModel task, ulong devId);
 }

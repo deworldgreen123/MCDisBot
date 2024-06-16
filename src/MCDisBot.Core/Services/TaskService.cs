@@ -1,5 +1,6 @@
 ﻿using MCDisBot.Core.Dto.Task;
 using MCDisBot.Core.IRepositories;
+using MCDisBot.Core.Mapping.Task;
 using MCDisBot.Core.Models;
 using MCDisBot.Core.Services.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -10,17 +11,7 @@ public class TaskService(ITaskRepository repository, ISettingService settingServ
 {
   public async Task<bool> Create(CreateTaskRequest newTask)
   {
-    var task = new TaskModel
-    {
-      Id = newTask.Id,
-      Content = newTask.Content,
-      LifeTime = newTask.LifeTime,
-      Status = TaskStatus.Created,
-      ServerId = newTask.ServerId,
-      UserId = newTask.UserId,
-      DevId = null,
-      Roles = newTask.Roles
-    };
+    var task = TaskModelMapper.Map(newTask);
     
     if (!await ValidationCheck(task)) return false;
     
@@ -40,7 +31,7 @@ public class TaskService(ITaskRepository repository, ISettingService settingServ
     }
     catch (ArgumentNullException)
     {
-      logger.LogError("Попытка удалить не существуещую задачу c {taskId}", taskId);
+      logger.LogError("Попытка удалить не существующую задачу c {taskId}", taskId);
       return false;
     }
     
@@ -57,7 +48,7 @@ public class TaskService(ITaskRepository repository, ISettingService settingServ
     throw new NotImplementedException();
   }
 
-  public Task<bool> AddDevToTask(ulong devId)
+  public Task<bool> AddDevToTask(TaskModel task, ulong devId)
   {
     throw new NotImplementedException();
   }
