@@ -3,5 +3,7 @@
 public enum StatusTask
 {
   CREATED,
-  
+  SEARHING,
+  COMPLETED,
+  CANCELED
 }
