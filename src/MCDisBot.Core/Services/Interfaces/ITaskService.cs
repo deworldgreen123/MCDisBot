@@ -1,13 +1,14 @@
-﻿using MCDisBot.Core.Models;
+﻿using MCDisBot.Core.Dto.Task;
+using MCDisBot.Core.Models;
 using MCDisBot.Core.Enums;
 
 namespace MCDisBot.Core.Services.Interfaces;
 
 public interface ITaskService
 {
-  Task Create(TaskModel newTask);
-  Task Delete(ulong taskId);
+  Task<bool> Create(CreateTaskRequest newTask);
+  Task<bool> Delete(ulong taskId);
   Task<TaskStatus> GetStatus(ulong taskId);
   Task<TaskModel> GetById(ulong taskId);
-  Task AddDevToTask(ulong devId);
+  Task<bool> AddDevToTask(ulong devId);
 }
