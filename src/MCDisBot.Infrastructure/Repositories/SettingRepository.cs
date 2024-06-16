@@ -3,8 +3,10 @@ using MCDisBot.Core.Models;
 
 namespace MCDisBot.Infrastructure.Repositories;
 
-public class SettingRepository : ISettingRepository
+public class SettingRepository(TaskBotContext context) : ISettingRepository
 {
+  private readonly TaskBotContext p_context = context;
+  
   public Task<IReadOnlyCollection<Setting>> GetAll()
   {
     throw new NotImplementedException();

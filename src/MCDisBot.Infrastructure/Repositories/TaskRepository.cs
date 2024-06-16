@@ -1,37 +1,48 @@
-﻿using MCDisBot.Core.IRepositories;
+﻿using System.Collections.Immutable;
+using MCDisBot.Core.IRepositories;
 using MCDisBot.Core.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MCDisBot.Infrastructure.Repositories;
 
-public class TaskRepository : ITaskRepository
+public class TaskRepository(TaskBotContext context) : ITaskRepository
 {
-  public Task<IReadOnlyCollection<TaskModel>> GetAll()
+  private readonly TaskBotContext p_context = context;
+  
+  public async Task<IReadOnlyCollection<TaskModel>> GetAll()
   {
-    throw new NotImplementedException();
+    return await p_context.Tasks.ToListAsync();
   }
 
-  public Task<TaskModel> GetById(ulong id)
+  public async Task<TaskModel> GetById(ulong id)
   {
-    throw new NotImplementedException();
+    var res = await p_context.Tasks.SingleOrDefaultAsync(m => m.Id == id);
+    if (res is null)
+      throw new ArgumentNullException("Не существует модель с типом" + typeof(TaskModel) + "и c Id" + id);
+    
+    return res;
   }
 
   public Task Add(TaskModel model)
   {
-    throw new NotImplementedException();
+    p_context.Tasks.Add(model);
+    return Task.CompletedTask;
   }
 
-  public Task Update(TaskModel model)
+  public async Task Update(TaskModel model)
   {
-    throw new NotImplementedException();
+    await GetById(model.Id);
+    p_context.Tasks.Update(model);
   }
 
-  public Task Remove(ulong id)
+  public async Task Remove(ulong id)
   {
-    throw new NotImplementedException();
+    var toDelete = await GetById(id);
+    p_context.Tasks.Remove(toDelete);
   }
 
-  public Task Save()
+  public async Task Save()
   {
-    throw new NotImplementedException();
+    await p_context.SaveChangesAsync();
   }
 }
