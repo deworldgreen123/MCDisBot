@@ -22,7 +22,12 @@ public class TaskRepository(TaskBotContext context) : ITaskRepository
     
     return res;
   }
-
+  
+  public bool Exists(ulong id)
+  {
+    return p_context.Tasks.Any(m => m.Id == id);
+  }
+  
   public Task Add(TaskModel model)
   {
     p_context.Tasks.Add(model);

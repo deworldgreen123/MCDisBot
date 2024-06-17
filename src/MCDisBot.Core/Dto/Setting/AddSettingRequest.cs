@@ -1,6 +1,6 @@
-﻿namespace MCDisBot.Core.Models;
+﻿namespace MCDisBot.Core.Dto.Setting;
 
-public class Setting
+public record AddSettingRequest
 {
   public required ulong ServerId { get; init; }
   public required string Roles { get; init; }

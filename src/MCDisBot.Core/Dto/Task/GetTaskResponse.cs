@@ -1,10 +1,9 @@
 ﻿using MCDisBot.Core.Enums;
 
-namespace MCDisBot.Core.Models;
+namespace MCDisBot.Core.Dto.Task;
 
-public class TaskModel
+public record GetTaskResponse()
 {
-  public required ulong Id { get; init; }
   public required string Content { get; init; }
   public required int LifeTime { get; init; }
   public required StatusTask Status { get; init; }

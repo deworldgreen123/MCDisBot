@@ -1,5 +1,6 @@
 ﻿using MCDisBot.Core.IRepositories;
 using MCDisBot.Core.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MCDisBot.Infrastructure.Repositories;
 
@@ -7,33 +8,45 @@ public class SettingRepository(TaskBotContext context) : ISettingRepository
 {
   private readonly TaskBotContext p_context = context;
   
-  public Task<IReadOnlyCollection<Setting>> GetAll()
+  public async Task<IReadOnlyCollection<Setting>> GetAll()
   {
-    throw new NotImplementedException();
+    return await p_context.Settings.ToListAsync();
   }
 
-  public Task<Setting> GetById(ulong id)
+  public async Task<Setting> GetById(ulong id)
   {
-    throw new NotImplementedException();
+    var res = await p_context.Settings.SingleOrDefaultAsync(m => m.ServerId == id);
+    if (res is null)
+      throw new ArgumentNullException("Не существует модель с типом" + typeof(TaskModel) + "и c Id" + id);
+    
+    return res;
   }
-
+  
+  public bool Exists(ulong id)
+  {
+    return p_context.Settings.Any(m => m.ServerId == id);
+  }
+  
   public Task Add(Setting model)
   {
-    throw new NotImplementedException();
+    p_context.Settings.Add(model);
+    return Task.CompletedTask;
   }
 
-  public Task Update(Setting model)
+  public async Task Update(Setting model)
   {
-    throw new NotImplementedException();
+    await GetById(model.ServerId);
+    p_context.Settings.Update(model);
   }
 
-  public Task Remove(ulong id)
+  public async Task Remove(ulong id)
   {
-    throw new NotImplementedException();
+    var toDelete = await GetById(id);
+    p_context.Settings.Remove(toDelete);
   }
 
-  public Task Save()
+  public async Task Save()
   {
-    throw new NotImplementedException();
+    await p_context.SaveChangesAsync();
   }
 }

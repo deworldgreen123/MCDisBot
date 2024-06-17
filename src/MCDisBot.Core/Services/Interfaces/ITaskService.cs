@@ -8,7 +8,7 @@ public interface ITaskService
 {
   Task<bool> Create(CreateTaskRequest newTask);
   Task<bool> Delete(ulong taskId);
-  Task<TaskStatus> GetStatus(ulong taskId);
-  Task<TaskModel> GetById(ulong taskId);
-  Task<bool> AddDevToTask(TaskModel task, ulong devId);
+  Task<StatusTask?> GetStatus(ulong taskId);
+  Task<GetTaskResponse?> GetById(ulong taskId);
+  Task<bool> AddDevToTask(AddDevToTaskRequest request);
 }
