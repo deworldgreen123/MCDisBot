@@ -1,5 +1,6 @@
 ﻿using MCDisBot.Core.Dto.Setting;
 using MCDisBot.Core.IRepositories;
+using MCDisBot.Core.Mapping.Setting;
 using MCDisBot.Core.Models;
 using MCDisBot.Core.Services.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -31,13 +32,7 @@ public class SettingService(ISettingRepository repository, ILogger<SettingServic
   {
     if (p_repository.Exists(newSetting.ServerId))
     {
-      var setting = new Setting
-      {
-        ServerId = newSetting.ServerId,
-        Roles = newSetting.Roles,
-        ChannelClient = newSetting.ChannelClient,
-        ChannelDev = newSetting.ChannelDev
-      };
+      var setting = SettingMapper.Map(newSetting);
       
       await p_repository.Update(setting);
       await p_repository.Save();
@@ -63,13 +58,7 @@ public class SettingService(ISettingRepository repository, ILogger<SettingServic
     
     var res = await p_repository.GetById(serverId);
     p_logger.LogInformation(@"Передали настройку сервера с id {serverId}", serverId);
-    var request = new GetSettingResponse
-    {
-      ServerId = res.ServerId,
-      Roles = res.Roles,
-      ChannelClient = res.ChannelClient,
-      ChannelDev = res.ChannelDev
-    };
+    var request = SettingResponseMapper.Map(res);
     return request;
   }
 

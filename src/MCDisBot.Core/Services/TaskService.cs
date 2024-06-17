@@ -1,6 +1,7 @@
 ﻿using MCDisBot.Core.Dto.Task;
 using MCDisBot.Core.Enums;
 using MCDisBot.Core.IRepositories;
+using MCDisBot.Core.Mapping.Task;
 using MCDisBot.Core.Models;
 using MCDisBot.Core.Services.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -15,17 +16,7 @@ public class TaskService(ITaskRepository taskRepository, ISettingRepository sett
   
   public async Task<bool> Create(CreateTaskRequest newTask)
   {
-    var task = new TaskModel
-    {
-      Id = newTask.Id,
-      Content = newTask.Content,
-      LifeTime = newTask.LifeTime,
-      Status = StatusTask.CREATED,
-      ServerId = newTask.ServerId,
-      UserId = newTask.UserId,
-      DevId = null,
-      Roles = newTask.Roles
-    };
+    var task = TaskModelMapper.Map(newTask);
     
     if (!await ValidationCheck(task) || p_taskRepository.Exists(newTask.Id)) return false;
     
@@ -75,16 +66,7 @@ public class TaskService(ITaskRepository taskRepository, ISettingRepository sett
     
     var res = await p_taskRepository.GetById(taskId);
     p_logger.LogInformation(@"Передали задачу с id {taskId}", taskId);
-    var request = new GetTaskResponse
-    {
-      Content = res.Content,
-      LifeTime = res.LifeTime,
-      Status = res.Status,
-      ServerId = res.ServerId,
-      UserId = res.UserId,
-      DevId = res.DevId,
-      Roles = res.Roles
-    };
+    var request = TaskResponseMapper.Map(res);
     
     return request;
   }
@@ -101,17 +83,7 @@ public class TaskService(ITaskRepository taskRepository, ISettingRepository sett
     if (res.DevId is not null)
       return false;
     
-    var taskWithDev = new TaskModel
-    {
-      Id = res.Id,
-      Content = res.Content,
-      LifeTime = res.LifeTime,
-      Status = StatusTask.COMPLETED,
-      ServerId = res.ServerId,
-      UserId = res.UserId,
-      DevId = request.DevId,
-      Roles = res.Roles
-    };
+    var taskWithDev = TaskWithDevMapper.Map(res, request.DevId);
     
     await p_taskRepository.Update(taskWithDev);
     await p_taskRepository.Save();

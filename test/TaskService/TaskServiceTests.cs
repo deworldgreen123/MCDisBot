@@ -1,6 +1,7 @@
 ﻿using MCDisBot.Core.Dto.Task;
 using MCDisBot.Core.IRepositories;
 using MCDisBot.Core.Models;
+using MCDisBot.Core.Services;
 using MCDisBot.Core.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -12,10 +13,10 @@ namespace test.TaskService
 	{
 		private readonly ITaskRepository p_taskRepository;
 		private readonly ITaskService p_taskService;
-		private readonly ISettingService p_settingRepository;
-		private readonly ILogger p_logger;
+		private readonly ISettingRepository p_settingRepository;
+		private readonly ILogger<MCDisBot.Core.Services.TaskService> p_logger;
 		private readonly TaskServiceFixture p_fixture;
-		public TaskServiceTests(TaskServiceFixture _taskServiceFixture, ILogger _logger)
+		public TaskServiceTests(TaskServiceFixture _taskServiceFixture, ILogger<MCDisBot.Core.Services.TaskService> _logger)
 		{
 			p_logger = _logger;
 			p_fixture = _taskServiceFixture;
@@ -89,7 +90,7 @@ namespace test.TaskService
 			var actual = p_taskService.GetStatus(task.Id).Result;
 
 			//assert
-			Assert.Equal(TaskStatus.Running, actual);
+			Assert.Equal(MCDisBot.Core.Enums.StatusTask.CREATED, actual);
 		}
 
 		[Fact]
@@ -115,7 +116,7 @@ namespace test.TaskService
 			var actual = p_taskService.GetById(task.Id).Result;
 
 			//assert
-			Assert.Equal(task.Id, actual.Id);
+			Assert.Equal(task.Id, actual.ServerId);
 		}
 
 		[Fact]
@@ -134,13 +135,14 @@ namespace test.TaskService
 		public async Task Given_service_is_successfully_add_developer_to_task()
 		{
 			//arrange
+			var addDev = new AddDevToTaskRequest { TaskId = 55, DevId = 5555 };
 			ulong devId = 5555;
 			var actualTask = new CreateTaskRequest { Id = 55, Content = "Content55", LifeTime = 30, ServerId = 5555, UserId = 5555, DevId = null, Roles = "Junior Backend" };
 			await p_taskService.Create(actualTask);
 			var task = p_taskService.GetById(actualTask.Id).Result;
 
 			//act
-			var actual = p_taskService.AddDevToTask(task, devId).Result;
+			var actual = p_taskService.AddDevToTask(addDev).Result;
 			var updatedTask = p_taskService.GetById(actualTask.Id).Result;
 
 			//assert
@@ -153,9 +155,9 @@ namespace test.TaskService
 		public TaskServiceFixture()
 		{
 			TaskRepositoryMock = new Mock<ITaskRepository>();
-			SettingServiceMock = new Mock<ISettingService>();
+			SettingServiceMock = new Mock<ISettingRepository>();
 		}
 		public Mock<ITaskRepository> TaskRepositoryMock { get; private set; }
-		public Mock<ISettingService> SettingServiceMock { get; private set; }
+		public Mock<ISettingRepository> SettingServiceMock { get; private set; }
 	}
 }

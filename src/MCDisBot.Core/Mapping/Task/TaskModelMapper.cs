@@ -1,4 +1,5 @@
 ﻿using MCDisBot.Core.Dto.Task;
+using MCDisBot.Core.Enums;
 using MCDisBot.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace MCDisBot.Core.Mapping.Task
 				Id = dto.Id,
 				Content = dto.Content,
 				LifeTime = dto.LifeTime,
-				Status = TaskStatus.Created,
+				Status = StatusTask.CREATED,
 				ServerId = dto.ServerId,
 				UserId = dto.UserId,
 				DevId = null,
